@@ -9,6 +9,7 @@ const API_URL = 'https://opentdb.com/api.php?amount=5';
 function App() {
 
       const [ quizzes, setQuizzes ] = useState([]);
+      
 
       useEffect(() => {
           async function getQuestions () {
@@ -23,12 +24,15 @@ function App() {
           getQuestions();
       }, []);  
 
+
       const questions = quizzes.map(quiz => {
           const randomIndex = Math.floor(Math.random() * 4); 
+          const id = nanoid();
           const multipleChoices = [...quiz.incorrect_answers];
           multipleChoices.splice(randomIndex, 0, quiz.correct_answer);
           return <Quizzes 
-                    key={nanoid()}
+                    key={id}
+                    id={id}
                     question={quiz.question}
                     choices={multipleChoices}
                   />  

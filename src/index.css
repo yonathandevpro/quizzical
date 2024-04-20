@@ -88,7 +88,7 @@
 
 .choices {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     width: 100%;
     margin-bottom: 5px;
 }
@@ -100,6 +100,7 @@
     cursor: pointer;
     font-family: Inter;
     font-weight: 500;
+    max-width: 160px;
     font-size: 13px;
     color: #293264;
     border: 0.79px solid #4D5B9E;
