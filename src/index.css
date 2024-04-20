@@ -7,24 +7,28 @@
 .container {
     height: 100vh;
     position: relative;
+    padding-top: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
     background-color: #F5F7FB;
 }
 
 .yellow-background {
+    width: 100px;
     position: absolute;
     top: 0;
     right: 0;
 }
 
 .gray-background {
+    width: 100px;
     position: absolute;
     bottom: 0;
     left: 0;
 }
 
+/* Css styles for start page */
 .start-page {
     text-align: center;
 }
@@ -60,4 +64,51 @@
 
 .start-page > button:hover {
     background-color: #5c69a9;
+}
+
+/* CSS for quizzes component */
+.quiz {
+    text-align: left;
+    padding-top: 14.63px;
+    padding-bottom: 15px;
+    border-bottom: 0.79px solid #DBDEF0;
+}
+.quiz > h1 {
+    margin-top: 0;
+    font-family: Karla, sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #293264;
+    margin-bottom: 12px;
+}
+
+.choices {
+    display: flex;
+}
+
+.choices > button {
+    padding-block: 4px;
+    cursor: pointer;
+    font-family: Inter;
+    font-weight: 500;
+    font-size: 13px;
+    margin-right: 12.71px;
+    margin-bottom: 15px;
+    color: #293264;
+    min-width: 90px;
+    border: 0.79px solid #4D5B9E;
+    border-radius: 7.94px;
+}
+
+.check-answers {
+    border: none;
+    border-radius: 12px;
+    margin: 20px auto 0;
+    font-family: Inter, sans-serif;
+    font-weight: 600;
+    display: inline;
+    font-size: 13px;
+    padding: 11px 21px 10px 22px;
+    background-color: #4D5B9E;
+    color: #F5F7FB;
 }
