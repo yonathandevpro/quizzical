@@ -5,7 +5,7 @@
 }
 
 .container {
-    height: 100vh;
+    min-height: 100vh;
     position: relative;
     padding-top: 20px;
     display: flex;
@@ -16,14 +16,14 @@
 
 .yellow-background {
     width: 100px;
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
 }
 
 .gray-background {
     width: 100px;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
 }
@@ -68,36 +68,48 @@
 
 /* CSS for quizzes component */
 .quiz {
-    text-align: left;
+    text-align: center;
+    width: 100%;
     padding-top: 14.63px;
     padding-bottom: 15px;
     border-bottom: 0.79px solid #DBDEF0;
 }
 .quiz > h1 {
     margin-top: 0;
+    max-width: 650px;
     font-family: Karla, sans-serif;
     font-weight: 700;
-    font-size: 1.4rem;
+    font-size: 1em;
     color: #293264;
     margin-bottom: 12px;
 }
 
 .choices {
     display: flex;
+    max-width: 100%;
+    justify-content: space-evenly;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 5px;
 }
 
 .choices > button {
     padding-block: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
     cursor: pointer;
     font-family: Inter;
     font-weight: 500;
     font-size: 13px;
     margin-right: 12.71px;
-    margin-bottom: 15px;
     color: #293264;
-    min-width: 90px;
     border: 0.79px solid #4D5B9E;
     border-radius: 7.94px;
+    min-width: 80px;
+}
+
+.choices > button:hover {
+    background-color: #D6DBF5;
 }
 
 .check-answers {
@@ -106,9 +118,37 @@
     margin: 20px auto 0;
     font-family: Inter, sans-serif;
     font-weight: 600;
-    display: inline;
-    font-size: 13px;
+    cursor: pointer;
+    font-size: 12px;
     padding: 11px 21px 10px 22px;
     background-color: #4D5B9E;
     color: #F5F7FB;
+}
+
+.check-answers:hover {
+    background-color: #5e699f;
+}
+
+@media screen and (max-width: 768px) {
+    .quiz > h1 {
+        font-size: 2.6vw; /* Adjust font size for smaller viewports */
+    }
+
+    .choices > button {
+        font-size: 1.55vw;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .quiz > h1{
+        font-size: 3vw; /* Adjust font size for even smaller viewports */
+    }
+
+    .choices > button {
+        font-size: 3vw;
+    }
+}
+
+.box {
+    max-width: 72vw;
 }
