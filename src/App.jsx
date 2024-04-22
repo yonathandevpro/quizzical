@@ -4,6 +4,7 @@ import GrayShape from './assets/gray-shape.png';
 import StartPage from './components/StartPage';
 import Quizzes from './components/Quizzes';
 import { nanoid } from 'nanoid';
+import he from 'he'
 
 const API_URL = 'https://opentdb.com/api.php?amount=5';
 
@@ -23,10 +24,11 @@ function App() {
                     const id = nanoid();
                     const multipleChoices = [...quiz.incorrect_answers];
                     multipleChoices.splice(randomIndex, 0, quiz.correct_answer);
+                    let parsedChoices = multipleChoices.map(choice => he.decode(choice));
                     return {
                         id: id,
                         question: quiz.question,
-                        choices: multipleChoices
+                        choices: parsedChoices
                     };
                 });
                 setQuizzes(shuffledQuizzes);
@@ -48,7 +50,7 @@ function App() {
         <Quizzes 
             key={quiz.id}
             id={quiz.id}
-            question={quiz.question}
+            question={he.decode(quiz.question)}
             choices={quiz.choices}
             selected={selected[quiz.id] || ''} // Pass down selected option for this quiz
             onOptionSelect={handleOptionSelect}

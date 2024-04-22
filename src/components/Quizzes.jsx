@@ -6,20 +6,22 @@ function Quizzes({ id, question, choices, selected, onOptionSelect }) {
     }
 
     const multipleChoices = choices.map(choice => (
-        <button
+        <button 
             key={choice}
             value={choice}
             onMouseEnter={(e) => { e.target.style.backgroundColor = '#D6DBF5'; }}
             onMouseLeave={(e) => { e.target.style.backgroundColor = selected === choice ? '#D6DBF5' : '#F5F7FB'; }}
             onClick={() => handleButtonClick(choice)}
             style={selected === choice ? { backgroundColor: '#D6DBF5' } : { backgroundColor: '#F5F7FB' }}
-            dangerouslySetInnerHTML={{ __html: choice }}
-        />
+        >
+          {choice}
+        </button>
+        
     ));
 
     return (
         <div className="quiz">
-            <h1 dangerouslySetInnerHTML={{ __html: question }} />
+            <h1>{question}</h1>
             <div className="choices">
                 {multipleChoices}
             </div>
