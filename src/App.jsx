@@ -4,17 +4,20 @@ import GrayShape from './assets/gray-shape.png';
 import StartPage from './components/StartPage';
 import Quizzes from './components/Quizzes';
 import { nanoid } from 'nanoid';
+import Confetti from 'react-confetti'
 import he from 'he';
 
 const API_URL = 'https://opentdb.com/api.php?amount=5';
 
 function App() {
     const [startPage, setStartPage] = useState(true);
+    const [jackpot, setJackPot] = useState(false);
     const [quizzes, setQuizzes] = useState([]);
     const [selected, setSelected] = useState([]);
     const [count, setCount] = useState(0);
     const [checkedAnswers, setCheckedAnswers] = useState(false);
 
+    
     useEffect(() => {
         getQuestions();
     }, []);
@@ -23,7 +26,6 @@ function App() {
     const getQuestions = async () => {
         const response = await fetch(API_URL);
         const data = await response.json();
-        console.log(data);
         if (data.response_code === 0) {
             const shuffledQuizzes = data.results.map(quiz => {
                 const randomIndex = Math.floor(Math.random() * (quiz.incorrect_answers.length + 1));
@@ -42,6 +44,7 @@ function App() {
             setQuizzes(shuffledQuizzes);
             setSelected([]);
             setCount(0);
+            setJackPot(false);
             setCheckedAnswers(false);
         }
     };
@@ -87,6 +90,9 @@ function App() {
                 newCount++;
             }
         });
+        if (newCount === 5) {
+            setJackPot(true);
+        }
         setCount(newCount); // Now placed outside the loop
     }, [selected, checkedAnswers]);
 
@@ -105,6 +111,7 @@ function App() {
 
                 (
                     <div className="container">
+                         {jackpot && <Confetti />}
                          <img src={YellowShape} className="yellow-background" alt="yellow shape" />
                          <div className="box">
                             {questions}
