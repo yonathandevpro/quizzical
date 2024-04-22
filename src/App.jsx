@@ -4,66 +4,68 @@ import GrayShape from './assets/gray-shape.png';
 import StartPage from './components/StartPage';
 import Quizzes from './components/Quizzes';
 import { nanoid } from 'nanoid';
-import he from 'he'
+import he from 'he';
 
 const API_URL = 'https://opentdb.com/api.php?amount=5';
 
 function App() {
     const [quizzes, setQuizzes] = useState([]);
     const [selected, setSelected] = useState([]);
-    const [ checkedAnswers, setCheckedAnswers ] = useState(false);
+    const [count, setCount] = useState(0);
+    const [checkedAnswers, setCheckedAnswers] = useState(false);
 
     useEffect(() => {
-        async function getQuestions() {
-            const response = await fetch(API_URL);
-            const data = await response.json();
-            console.log(data);
-            if (data.response_code === 0) {
-                const shuffledQuizzes = data.results.map(quiz => {
-                    const randomIndex = Math.floor(Math.random() * (quiz.incorrect_answers.length + 1)); 
-                    const id = nanoid();
-                    const incomingQuestion = he.decode(quiz.question);
-                    const multipleChoices = [...quiz.incorrect_answers];
-                    multipleChoices.splice(randomIndex, 0, quiz.correct_answer);
-                    let parsedChoices = multipleChoices.map(choice => he.decode(choice));
-                    return {
-                        id: id,
-                        question: incomingQuestion,
-                        choices: parsedChoices,
-                        correctAnswer: quiz.correct_answer
-                    };
-                });
-                setQuizzes(shuffledQuizzes);
-            }
-        }
-
         getQuestions();
     }, []);
 
-    function checkAnswer () {
+    // Function to fetch questions from the API
+    const getQuestions = async () => {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        console.log(data);
+        if (data.response_code === 0) {
+            const shuffledQuizzes = data.results.map(quiz => {
+                const randomIndex = Math.floor(Math.random() * (quiz.incorrect_answers.length + 1));
+                const id = nanoid();
+                const incomingQuestion = he.decode(quiz.question);
+                const multipleChoices = [...quiz.incorrect_answers];
+                multipleChoices.splice(randomIndex, 0, quiz.correct_answer);
+                let parsedChoices = multipleChoices.map(choice => he.decode(choice));
+                return {
+                    id: id,
+                    question: incomingQuestion,
+                    choices: parsedChoices,
+                    correctAnswer: quiz.correct_answer
+                };
+            });
+            setQuizzes(shuffledQuizzes);
+            setSelected([]);
+            setCount(0);
+            setCheckedAnswers(false);
+        }
+    };
+
+    function checkAnswer() {
         setCheckedAnswers(true);
     }
 
-
     const handleOptionSelect = (id, choice, correctAnswer) => {
-     
         setSelected(prevSelected => {
             const index = prevSelected.findIndex(quiz => quiz.ID === id);
             if (index !== -1) {
-                const updateSelected = [ ...prevSelected ];
-                updateSelected[index] = { ID: id, userAnswer: choice, correctAnswer: correctAnswer }
+                const updateSelected = [...prevSelected];
+                updateSelected[index] = { ID: id, userAnswer: choice, correctAnswer: correctAnswer };
                 return updateSelected;
             } else {
-                return [ ...prevSelected, { ID: id, userAnswer: choice, correctAnswer: correctAnswer } ];
+                return [...prevSelected, { ID: id, userAnswer: choice, correctAnswer: correctAnswer }];
             }
         });
-        
     };
 
     const questions = quizzes.map(quiz => {
         const index = selected.findIndex(quest => quest.ID === quiz.id);
         return (
-            <Quizzes 
+            <Quizzes
                 key={quiz.id}
                 id={quiz.id}
                 correctAnswer={quiz.correctAnswer}
@@ -71,22 +73,39 @@ function App() {
                 allAnswers={selected || ''}
                 question={quiz.question}
                 choices={quiz.choices}
-                selected={index !== -1 ? selected[index].userAnswer : '' } // Pass down selected option for this quiz
+                selected={index !== -1 ? selected[index].userAnswer : ''}
                 onOptionSelect={handleOptionSelect}
-        />);
+            />
+        );
     });
 
-  
+    useEffect(() => {
+        let newCount = 0;
+        selected.forEach(element => {
+            if (element.userAnswer === element.correctAnswer) {
+                newCount++;
+            }
+        });
+        setCount(newCount); // Now placed outside the loop
+    }, [selected, checkedAnswers]);
+
     return (
         <div className="container">
             <img src={YellowShape} className="yellow-background" alt="yellow shape" />
             <div className="box">
                 {questions}
             </div>
-            {selected.length === 5 && <button className="check-answers" onClick={checkAnswer}>Check answers</button>}
+            {checkedAnswers ? (
+                <div className="result-display">
+                    <h3> You scored {count}/5 correct answers</h3>
+                    <button onClick={getQuestions}>Play again</button>
+                </div>
+            ) : (
+                selected.length === 5 && <button className="check-answers" onClick={checkAnswer}>Check answers</button>
+            )}
             <img src={GrayShape} className="gray-background" alt="gray shape" />
         </div>
-    );  
+    );
 }
 
 export default App;

@@ -1,17 +1,20 @@
 import React, {useState} from 'react';
 
 function Quizzes({ id, question, choices, correctAnswer, allAnswers, selected, onOptionSelect, checked }) {
-    function handleButtonClick(choice) {
+  
+
+  function handleButtonClick(choice) {
         onOptionSelect(id, choice, correctAnswer);
     }
        
     
     const multipleChoices = choices.map(choice => {
-
+     
       if ( checked ) {
           let style; 
           if ( selected === correctAnswer ) {
               if ( choice === correctAnswer ){
+
                  style = { backgroundColor: '#94D7A2' }
               } else {
                 style = { backgroundColor: '#F5F7FB' }

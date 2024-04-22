@@ -150,3 +150,30 @@
 .box {
     max-width: 72vw;
 }
+
+.result-display {
+    display: flex; 
+    align-items: center;
+    margin: 40px auto 0;
+}
+
+.result-display > h3 {
+    margin-left: 120px;
+    font-family: Inter;
+    font-weight: 700;
+    font-size: 12.8px;
+    margin-right: 30px;
+    color: #293264;
+}
+
+.result-display > button {
+    background-color: #4D5B9E;
+    color: #F5F7FB;
+    padding: 8px 24px;
+    font-weight: 600;
+    font-family: Inter;
+    font-size: 10.24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
