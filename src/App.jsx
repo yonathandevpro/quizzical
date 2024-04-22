@@ -11,8 +11,8 @@ const API_URL = 'https://opentdb.com/api.php?amount=5';
 function App() {
     const [quizzes, setQuizzes] = useState([]);
     const [selected, setSelected] = useState([]);
+    const [ checkedAnswers, setCheckedAnswers ] = useState(false);
 
-    console.log(selected);
     useEffect(() => {
         async function getQuestions() {
             const response = await fetch(API_URL);
@@ -40,12 +40,13 @@ function App() {
         getQuestions();
     }, []);
 
-    const handleOptionSelect = (id, choice, correctAnswer) => {
-        // setSelected(prevSelected => ({
-        //     ...prevSelected,
-        //     [id]: choice
-        // }));
+    function checkAnswer () {
+        setCheckedAnswers(true);
+    }
 
+
+    const handleOptionSelect = (id, choice, correctAnswer) => {
+     
         setSelected(prevSelected => {
             const index = prevSelected.findIndex(quiz => quiz.ID === id);
             if (index !== -1) {
@@ -66,6 +67,8 @@ function App() {
                 key={quiz.id}
                 id={quiz.id}
                 correctAnswer={quiz.correctAnswer}
+                checked={checkedAnswers}
+                allAnswers={selected || ''}
                 question={quiz.question}
                 choices={quiz.choices}
                 selected={index !== -1 ? selected[index].userAnswer : '' } // Pass down selected option for this quiz
@@ -80,7 +83,7 @@ function App() {
             <div className="box">
                 {questions}
             </div>
-            {selected.length === 5 && <button className="check-answers">Check answers</button>}
+            {selected.length === 5 && <button className="check-answers" onClick={checkAnswer}>Check answers</button>}
             <img src={GrayShape} className="gray-background" alt="gray shape" />
         </div>
     );  
