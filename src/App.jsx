@@ -9,6 +9,7 @@ import he from 'he';
 const API_URL = 'https://opentdb.com/api.php?amount=5';
 
 function App() {
+    const [startPage, setStartPage] = useState(true);
     const [quizzes, setQuizzes] = useState([]);
     const [selected, setSelected] = useState([]);
     const [count, setCount] = useState(0);
@@ -89,23 +90,37 @@ function App() {
         setCount(newCount); // Now placed outside the loop
     }, [selected, checkedAnswers]);
 
-    return (
-        <div className="container">
-            <img src={YellowShape} className="yellow-background" alt="yellow shape" />
-            <div className="box">
-                {questions}
-            </div>
-            {checkedAnswers ? (
-                <div className="result-display">
-                    <h3> You scored {count}/5 correct answers</h3>
-                    <button onClick={getQuestions}>Play again</button>
-                </div>
-            ) : (
-                selected.length === 5 && <button className="check-answers" onClick={checkAnswer}>Check answers</button>
-            )}
-            <img src={GrayShape} className="gray-background" alt="gray shape" />
-        </div>
-    );
+    function changeState() {
+        setStartPage(false);
+    }
+
+    const UI = startPage ? 
+                (
+                    <div className="container" style={{justifyContent: 'center'}}>
+                         <img src={YellowShape} className="yellow-background" alt="yellow shape" />
+                         <StartPage display={startPage} changeDisplay={changeState}/>
+                         <img src={GrayShape} className="gray-background" alt="gray shape" />
+                    </div>
+                ) : 
+
+                (
+                    <div className="container">
+                         <img src={YellowShape} className="yellow-background" alt="yellow shape" />
+                         <div className="box">
+                            {questions}
+                         </div>
+                        {checkedAnswers ? (
+                            <div className="result-display">
+                                <h3> You scored {count}/5 correct answers</h3>
+                                <button onClick={getQuestions}>Play again</button>
+                            </div>
+                        ) : (
+                        selected.length === 5 && <button className="check-answers" onClick={checkAnswer}>Check answers</button>
+                        )}
+                        <img src={GrayShape} className="gray-background" alt="gray shape" />
+                    </div>
+                )
+   return UI;
 }
 
 export default App;

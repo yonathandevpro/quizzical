@@ -30,7 +30,7 @@
 
 /* Css styles for start page */
 .start-page {
-    text-align: center;
+   text-align: center; 
 }
 
 .start-page > h1 {
@@ -154,7 +154,7 @@
 .result-display {
     display: flex; 
     align-items: center;
-    margin: 40px auto 0;
+    margin: 20px auto 0;
 }
 
 .result-display > h3 {
@@ -176,4 +176,8 @@
     border: none;
     border-radius: 8px;
     cursor: pointer;
+}
+
+.result-display > button:hover{
+    background-color: #5c69a9;
 }
