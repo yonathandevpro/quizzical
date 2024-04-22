@@ -106,11 +106,9 @@
     border: 0.79px solid #4D5B9E;
     border-radius: 7.94px;
     min-width: 80px;
+    transition: background-color 0.3s;
 }
 
-.choices > button:hover {
-    background-color: #D6DBF5;
-}
 
 .check-answers {
     border: none;
