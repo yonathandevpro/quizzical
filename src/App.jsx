@@ -10,7 +10,7 @@ const API_URL = 'https://opentdb.com/api.php?amount=5';
 
 function App() {
     const [quizzes, setQuizzes] = useState([]);
-    const [selected, setSelected] = useState({});
+    const [selected, setSelected] = useState([]);
 
     console.log(selected);
     useEffect(() => {
@@ -20,15 +20,17 @@ function App() {
             console.log(data);
             if (data.response_code === 0) {
                 const shuffledQuizzes = data.results.map(quiz => {
-                    const randomIndex = Math.floor(Math.random() * 4); 
+                    const randomIndex = Math.floor(Math.random() * (quiz.incorrect_answers.length + 1)); 
                     const id = nanoid();
+                    const incomingQuestion = he.decode(quiz.question);
                     const multipleChoices = [...quiz.incorrect_answers];
                     multipleChoices.splice(randomIndex, 0, quiz.correct_answer);
                     let parsedChoices = multipleChoices.map(choice => he.decode(choice));
                     return {
                         id: id,
-                        question: quiz.question,
-                        choices: parsedChoices
+                        question: incomingQuestion,
+                        choices: parsedChoices,
+                        correctAnswer: quiz.correct_answer
                     };
                 });
                 setQuizzes(shuffledQuizzes);
@@ -38,24 +40,38 @@ function App() {
         getQuestions();
     }, []);
 
-    const handleOptionSelect = (id, choice) => {
-        setSelected(prevSelected => ({
-            ...prevSelected,
-            [id]: choice
-        }));
+    const handleOptionSelect = (id, choice, correctAnswer) => {
+        // setSelected(prevSelected => ({
+        //     ...prevSelected,
+        //     [id]: choice
+        // }));
+
+        setSelected(prevSelected => {
+            const index = prevSelected.findIndex(quiz => quiz.ID === id);
+            if (index !== -1) {
+                const updateSelected = [ ...prevSelected ];
+                updateSelected[index] = { ID: id, userAnswer: choice, correctAnswer: correctAnswer }
+                return updateSelected;
+            } else {
+                return [ ...prevSelected, { ID: id, userAnswer: choice, correctAnswer: correctAnswer } ];
+            }
+        });
         
     };
 
-    const questions = quizzes.map(quiz => (
-        <Quizzes 
-            key={quiz.id}
-            id={quiz.id}
-            question={he.decode(quiz.question)}
-            choices={quiz.choices}
-            selected={selected[quiz.id] || ''} // Pass down selected option for this quiz
-            onOptionSelect={handleOptionSelect}
-        />
-    ));
+    const questions = quizzes.map(quiz => {
+        const index = selected.findIndex(quest => quest.ID === quiz.id);
+        return (
+            <Quizzes 
+                key={quiz.id}
+                id={quiz.id}
+                correctAnswer={quiz.correctAnswer}
+                question={quiz.question}
+                choices={quiz.choices}
+                selected={index !== -1 ? selected[index].userAnswer : '' } // Pass down selected option for this quiz
+                onOptionSelect={handleOptionSelect}
+        />);
+    });
 
   
     return (
@@ -64,7 +80,7 @@ function App() {
             <div className="box">
                 {questions}
             </div>
-            {Object.keys(selected).length === 5 && <button className="check-answers">Check answers</button>}
+            {selected.length === 5 && <button className="check-answers">Check answers</button>}
             <img src={GrayShape} className="gray-background" alt="gray shape" />
         </div>
     );  

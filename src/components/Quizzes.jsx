@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 
-function Quizzes({ id, question, choices, selected, onOptionSelect }) {
+function Quizzes({ id, question, choices, correctAnswer, selected, onOptionSelect }) {
   function handleButtonClick(choice) {
-        onOptionSelect(id, choice);
+        onOptionSelect(id, choice, correctAnswer);
     }
 
     const multipleChoices = choices.map(choice => (
