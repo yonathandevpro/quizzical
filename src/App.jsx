@@ -11,13 +11,11 @@ const API_URL = 'https://opentdb.com/api.php?amount=5';
 
 function App() {
     const [startPage, setStartPage] = useState(true);
-    const [jackpot, setJackPot] = useState(false);
     const [quizzes, setQuizzes] = useState([]);
     const [selected, setSelected] = useState([]);
     const [count, setCount] = useState(0);
     const [checkedAnswers, setCheckedAnswers] = useState(false);
 
-    
     useEffect(() => {
         getQuestions();
     }, []);
@@ -44,7 +42,6 @@ function App() {
             setQuizzes(shuffledQuizzes);
             setSelected([]);
             setCount(0);
-            setJackPot(false);
             setCheckedAnswers(false);
         }
     };
@@ -90,10 +87,8 @@ function App() {
                 newCount++;
             }
         });
-        if (newCount === 5) {
-            setJackPot(true);
-        }
-        setCount(newCount); // Now placed outside the loop
+        setCount(newCount);
+         // Now placed outside the loop
     }, [selected, checkedAnswers]);
 
     function changeState() {
@@ -111,7 +106,7 @@ function App() {
 
                 (
                     <div className="container">
-                         {jackpot && <Confetti />}
+                         {count == 5 && <Confetti />}
                          <img src={YellowShape} className="yellow-background" alt="yellow shape" />
                          <div className="box">
                             {questions}
